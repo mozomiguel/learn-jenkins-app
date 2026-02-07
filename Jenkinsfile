@@ -1,19 +1,25 @@
 // Uses Declarative syntax to run commands inside a container.
 pipeline {
-    agent {
-        kubernetes {
-            containerTemplate {
-                name 'node'
-                image 'node:18-alpine'
-                command 'cat'
-                ttyEnabled true
-            }
-            defaultContainer 'node'
-            retries 2
-        }
-    }
+    agent any
+    // {
+    //     kubernetes {
+    //         containerTemplate {
+    //             name 'node'
+    //             image 'node:18-alpine'
+    //             command 'cat'
+    //             ttyEnabled true
+    //         }
+    //         defaultContainer 'node'
+    //         retries 2
+    //     }
+    // }
     stages {
         stage('Build') {
+            agent {
+                docker {
+                    image 'node:18-alpine'
+                }
+            }
             steps {
                 sh '''
                     ls -la
@@ -26,15 +32,39 @@ pipeline {
             }
         }
         stage('test') {
+            agent {
+                docker {
+                    image 'node:18-alpine'
+                }
+            }
             steps {
                 sh 'test -f build/index.html'
                 sh 'npm test'
             }
         }
+        // stage('E2E') {
+        //     agent {
+        //         kubernetes {
+        //             containerTemplate {
+        //                 name 'node'
+        //                 image 'node:18-alpine'
+        //                 command 'cat'
+        //                 ttyEnabled true
+        //             }
+        //             defaultContainer 'node'
+        //             retries 2
+        //         }
+        //     }
+        //     steps {
+        //         sh 'test -f build/index.html'
+        //         sh 'npm test'
+        //     }
+        // }
+
     }
-    post {
-        always {
-            junit 'test-results/junit.xml'
-        }
-    }
+    // post {
+    //     always {
+    //         junit 'test-results/junit.xml'
+    //     }
+    // }
 }
