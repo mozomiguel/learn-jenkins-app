@@ -3,13 +3,23 @@ pipeline {
     stages {
         stage('Build') {
             agent {
-                docker {
-                    image 'node:18-alpine'
+                kubernetes {
+                    yaml """
+                            apiVersion: v1
+                            kind: Pod
+                            spec:
+                                containers:
+                                    - name: node
+                                      image: node:18-alpine
+                                      command:
+                                        - cat
+                                        tty: true
+                        """
+                    defaultContainer 'node'
                 }
             }
             steps {
                 sh '''
-                    sudo systemctl start docker
                     ls -la
                     node --version
                     npm --version
