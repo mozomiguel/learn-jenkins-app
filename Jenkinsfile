@@ -32,9 +32,9 @@ pipeline {
         }
     }
     stages {
-        stage('Main') {
+        stage('Build') {
             steps {
-                sh 'hostname'
+                sh 'npm --version'
             }
         }
     }
