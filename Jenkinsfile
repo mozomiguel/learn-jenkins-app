@@ -16,7 +16,6 @@ pipeline {
         stage('Build') {
             steps {
                 sh '''
-                    sudo systemctl start docker
                     ls -la
                     node --version
                     npm --version
