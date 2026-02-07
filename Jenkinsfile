@@ -7,6 +7,8 @@ pipeline {
             containerTemplate {
                 name 'node'
                 image 'node:18-alpine'
+                command 'cat'
+                ttyEnabled true
             }
 //             yaml '''
 // apiVersion: v1
