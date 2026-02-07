@@ -15,7 +15,15 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                sh 'npm --version'
+                sh '''
+                    sudo systemctl start docker
+                    ls -la
+                    node --version
+                    npm --version
+                    npm ci
+                    npm run build
+                    ls -la
+                '''
             }
         }
     }
